@@ -11,21 +11,21 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+with open('config.json') as cofig_file:
+    config = json.load(cofig_file)
+    config = config['config']
+
+SECRET_KEY = config['secret']
+DEBUG = config['DEBUG'] or False
+ALLOWED_HOSTS = config['ALLOWED_HOSTS']
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-n41m6n^la!9q=7#j+no+b-s!h%h1*=-&4hb&le9&4ae0%o6*gn"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -75,9 +75,17 @@ WSGI_APPLICATION = "blog_app_project.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
+    "test": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+    },
+    "default": {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config['DATABASE']['DB_NAME'],
+        'USER': config['DATABASE']['DB_USER'],
+        'PASSWORD': config['DATABASE']['DB_PASSWORD'],
+        'HOST': config['DATABASE']['DB_HOST'],
+        'PORT': config['DATABASE']['DB_PORT'],
     }
 }
 

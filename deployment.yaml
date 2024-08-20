@@ -16,6 +16,6 @@ spec:
       - name: blog-app-web
         image: dockerprithvi/blog-app:latest
         ports:
-          - containerPort: 80
+          - containerPort: 8000
       imagePullSecrets:
-          - name: blog-app-secret
+          - name: my-dockerhub-secret

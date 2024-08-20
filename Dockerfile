@@ -27,3 +27,5 @@ COPY . .
 # Expose the port that the application listens on.
 EXPOSE 8000
 
+# Run the application.
+CMD gunicorn 'blog_app_project.wsgi' --bind=0.0.0.0:8000

@@ -12,10 +12,44 @@ spec:
       labels:
         app: blog-app
     spec:
+      initContainers:
+        - name: prepare-config
+          image: busybox
+          command: ["sh", "-c", "test -f /app/config.json"]
+          volumeMounts:
+            - mountPath: /app/config.json
+              name: config-volume
+              subPath: config.json
+
+        - name: migrate
+          image: dockerprithvi/blog-app:latest
+          command: ["python", "manage.py", "migrate"]
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+               secretKeyRef:
+                 key: DATABASE_URL
+                 name: db-url-secret
+          volumeMounts:
+           - mountPath: /app/config.json
+             subPath: config.json
+             name: config-volume
+
       containers:
       - name: blog-app-web
         image: dockerprithvi/blog-app:latest
         ports:
           - containerPort: 8000
+        volumeMounts:
+          - mountPath: /app/config.json
+            subPath: config.json
+            name: config-volume
+
       imagePullSecrets:
           - name: my-dockerhub-secret
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: blog-app-config
+

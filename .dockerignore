@@ -33,3 +33,4 @@
 LICENSE
 README.md
 config.json
+secrets.env

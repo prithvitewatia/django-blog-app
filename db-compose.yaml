@@ -1,0 +1,13 @@
+services:
+  blog-app-db:
+    image: postgres:13
+    env_file:
+      - secrets.env
+    networks:
+      - shared-network
+    volumes:
+      - blog-db-data:/var/lib/postgresql/data
+networks:
+  shared-network:
+volumes:
+  blog-db-data:

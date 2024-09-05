@@ -1,9 +1,7 @@
 {% extends 'blog_app/base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+  <script src="https://cdn.tiny.cloud/1/{{ settings.TINYMCE_API_KEY }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+{% crispy form %}
 {% endblock %}

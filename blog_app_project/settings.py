@@ -35,6 +35,9 @@ ALLOWED_HOSTS = config['ALLOWED_HOSTS']
 INSTALLED_APPS = [
     "users",
     "blog_app",
+    "tinymce",
+    "crispy_forms",
+    "crispy_bootstrap4",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -139,3 +142,14 @@ LOGOUT_REDIRECT_URL = reverse_lazy("users:login")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+
+STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
+
+TINY_MCE_CONFIG = config["TINY_MCE"]
+TINYMCE_API_KEY = TINY_MCE_CONFIG.get("API-KEY", "no-api-key")
+TINYMCE_DEFAULT_CONFIG = TINY_MCE_CONFIG["DEFAULT-CONFIG"]
+TINYMCE_SPELLCHECKER = TINY_MCE_CONFIG.get("SPELLCHECKER", False)
+TINYMCE_COMPRESSOR = TINY_MCE_CONFIG.get("COMPRESSOR", False)

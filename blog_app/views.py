@@ -1,6 +1,9 @@
+import bleach
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
+from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -12,7 +15,7 @@ from django.views.generic import (
 
 from .forms import BlogPostCreateUpdateForm
 from .models import BlogPost
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 
 # Create your views here.
@@ -21,6 +24,7 @@ class BlogPostListView(ListView):
     template_name = "blog_app/index.html"
     context_object_name = "posts"
     ordering = ["-updated_on"]
+    paginate_by = 10
 
 
 class BlogPostDetailView(DetailView):
@@ -40,6 +44,11 @@ class BlogPostCreateView(LoginRequiredMixin,CreateView):
     context_object_name = "post"
     success_url = reverse_lazy("blog_app:index")
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -55,6 +64,11 @@ class BlogPostUpdateView(LoginRequiredMixin,UpdateView):
     template_name = "blog_app/create_update_form.html"
     context_object_name = "post"
     success_url = reverse_lazy("blog_app:index")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get(self, request, *args, **kwargs):
         self.object = get_object_or_404(BlogPost, pk=kwargs["pk"])
@@ -81,3 +95,32 @@ class BlogPostDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         self.object.delete()
 
         return super().delete(request, *args, **kwargs)
+
+class BlogPostSearchView(ListView):
+    template_name = "blog_app/index.html"
+    PAGINATION_COUNT = 10
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get("q")
+        results = []
+        if query:
+            # Using bleach to strip out HTML from the content before searching
+            clean_content = BlogPost.objects.annotate(
+                clean_content=SearchVector(bleach.clean('body', tags=[], strip=True))
+            )
+
+            # Build a search query and rank the results by relevance
+            search_query = SearchQuery(query)
+            results = clean_content.annotate(
+                search=SearchVector('title', 'clean_content'),
+                rank=SearchRank(SearchVector('title', 'clean_content'), search_query)
+            ).filter(search=search_query).order_by('-rank')
+
+        paginator = Paginator(results, self.PAGINATION_COUNT)
+        page_number = request.GET.get("page")
+        paginated_results = paginator.get_page(page_number)
+
+        return render(request, self.template_name, context={
+            'posts': paginated_results,
+            'query': query
+        })

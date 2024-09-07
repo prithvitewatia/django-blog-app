@@ -9,4 +9,5 @@ urlpatterns = [
     path("new/", views.BlogPostCreateView.as_view(), name="create"),
     path("<int:pk>/edit/", views.BlogPostUpdateView.as_view(), name="update"),
     path("<int:pk>/delete", views.BlogPostDeleteView.as_view(), name="delete"),
+    path("search/", views.BlogPostSearchView.as_view(), name="search")
 ]

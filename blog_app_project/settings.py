@@ -35,6 +35,7 @@ ALLOWED_HOSTS = config['ALLOWED_HOSTS']
 INSTALLED_APPS = [
     "users",
     "blog_app",
+    "gateway",
     "tinymce",
     "crispy_forms",
     "crispy_bootstrap4",

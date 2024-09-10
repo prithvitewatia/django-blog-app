@@ -57,7 +57,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "blog_app_project.urls"
+ROOT_URLCONF = "mediapolis.urls"
 
 TEMPLATES = [
     {
@@ -75,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "blog_app_project.wsgi.application"
+WSGI_APPLICATION = "mediapolis.wsgi.application"
 
 
 # Database

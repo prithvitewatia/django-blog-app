@@ -1,5 +1,5 @@
 services:
-  blog-app-db:
+  db:
     image: postgres:13
     env_file:
       - secrets.env

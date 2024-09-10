@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -17,7 +17,7 @@ class SignUpView(SuccessMessageMixin, CreateView):
     success_message = '%(username) You have been successfully registered!'
 
 
-class ProfileView(UpdateView):
+class ProfileView(LoginRequiredMixin,UpdateView):
     model = Profile
     template_name = 'users/profile.html'
     def get(self, request, *args, **kwargs):
@@ -36,7 +36,7 @@ class ProfileView(UpdateView):
     def post(self, request, *args, **kwargs):
         user = request.user
         user_update_form = UserUpdateForm(request.POST, instance=user)
-        profile_update_form = ProfileUpdateForm(request.POST, instance=user.profile)
+        profile_update_form = ProfileUpdateForm(request.POST, request.FILES, instance=user.profile)
         if user_update_form.is_valid() and profile_update_form.is_valid():
             user_update_form.save()
             profile_update_form.save()

@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 
 from . import views
@@ -11,3 +13,6 @@ urlpatterns = [
     path("<int:pk>/delete", views.BlogPostDeleteView.as_view(), name="delete"),
     path("search/", views.BlogPostSearchView.as_view(), name="search")
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

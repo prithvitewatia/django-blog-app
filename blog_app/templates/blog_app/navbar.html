@@ -46,7 +46,7 @@
                     <!-- User Dropdown (visible on large screens) -->
                     <li class="nav-item dropdown d-none d-lg-block">
                         <a href="#" class="nav-link dropdown-toggle text-white" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ user.profile.avatar }}" alt="User Avatar" width="32" height="32" class="rounded-circle me-2">
+                            <img src="{{ user.profile.avatar.url }}" alt="User Avatar" width="32" height="32" class="rounded-circle me-2">
                             {{ user.username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -64,7 +64,7 @@
 
                     <li class="nav-item w-100 d-lg-none mt-2">
                         <a href="{% url 'users:profile' %}" class="btn btn-light w-100">
-                            <img src="{{ user.profile.avatar }}" alt="User Avatar" width="32" height="32" class="rounded-circle me-2">
+                            <img src="{{ user.profile.avatar.url }}" alt="User Avatar" width="32" height="32" class="rounded-circle me-2">
                             {{ user.username }}
                         </a>
                     </li>

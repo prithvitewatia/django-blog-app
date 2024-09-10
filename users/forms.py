@@ -20,3 +20,10 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar']
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get('avatar')
+        # TODO complete this method
+        return avatar
+
+

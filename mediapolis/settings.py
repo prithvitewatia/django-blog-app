@@ -14,16 +14,21 @@ from pathlib import Path
 import json
 
 from django.urls import reverse_lazy
+import sentry_sdk
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-with open('config.json') as cofig_file:
-    config = json.load(cofig_file)
+with open('config.json') as config_file:
+    config = json.load(config_file)
     config = config['config']
 
 SECRET_KEY = config['secret']
 DEBUG = config['DEBUG'] or False
 ALLOWED_HOSTS = config['ALLOWED_HOSTS']
+
+sentry_sdk.init(
+    dsn=config['sentry_dsn'],
+)
 
 
 # Quick-start development settings - unsuitable for production

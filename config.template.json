@@ -24,6 +24,7 @@
       },
       "SPELLCHECKER": false,
       "COMPRESSOR": false
-    }
+    },
+    "sentry_dsn": ""
   }
 }

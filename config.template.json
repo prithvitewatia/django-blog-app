@@ -11,6 +11,19 @@
       "DB_PASSWORD": "",
       "DB_HOST": "",
       "DB_PORT": 0
+    },
+    "TINY_MCE": {
+      "API-KEY": "api_key",
+      "DEFAULT-CONFIG": {
+        "theme": "silver",
+        "height": 500,
+        "menubar": true,
+        "plugins": "image codesample link",
+        "toolbar": "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image | help",
+        "images_upload_url": "/file_manager/upload_image/"
+      },
+      "SPELLCHECKER": false,
+      "COMPRESSOR": false
     }
   }
 }

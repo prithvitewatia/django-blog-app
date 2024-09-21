@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "blog_app",
     "gateway",
     "tinymce",
+    "file_manager",
     "crispy_forms",
     "crispy_bootstrap4",
     "django.contrib.admin",

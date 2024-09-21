@@ -23,5 +23,6 @@ urlpatterns = [
     path("accounts/", include("users.urls"), name="users"),
     path("admin/", admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
+    path('file_manager/', include('file_manager.urls'), name='file-manager'),
     path('', include('gateway.urls'))
 ]

@@ -7,7 +7,7 @@ from django.dispatch import receiver
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default="blog_img.jpg")
+    avatar = models.ImageField(default="blog_img.jpg", upload_to="avatars/")
 
     def __str__(self):
         return self.user.username

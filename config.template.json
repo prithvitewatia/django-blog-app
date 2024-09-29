@@ -1,10 +1,19 @@
 {
   "config": {
     "secret": "",
+    "fallback_secret_key": "",
     "ALLOWED_HOSTS": [
       "*"
     ],
     "DEBUG": true,
+    "SECURE-SSL-REDIRECT": true,
+    "CSRF-COOKIE-SECURE": true,
+    "SESSION-COOKIE-SECURE": true,
+    "HSTS": {
+      "PRELOAD": true,
+      "MAXAGE": 31536000,
+      "INCLUDE-SUBDOMAINS": true
+    },
     "DATABASE": {
       "DB_NAME": "",
       "DB_USER": "",
@@ -25,6 +34,23 @@
       "SPELLCHECKER": false,
       "COMPRESSOR": false
     },
-    "sentry_dsn": ""
+    "sentry_dsn": "",
+    "static_url": "static/",
+    "media_url": "media/",
+    "AWS": {
+      "ACCESS-KEY-ID": "",
+      "SECRET-ACCESS-KEY": "",
+      "REGION": "",
+      "ENDPOINT-URL": "",
+      "DEFAULT_ACL": "",
+      "QUERYSTRING_AUTH": false,
+      "USE_SSL": false,
+      "DEFAULT_BUCKET_NAME": "",
+      "STATIC_BUCKET_NAME": "",
+      "MAX-MEMORY_SIZE": "",
+      "CUSTOM-DOMAIN": "",
+      "CLOUDFRONT-KEY-ID": "",
+      "CLOUDFRONT-KEY": ""
+    }
   }
 }

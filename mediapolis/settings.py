@@ -23,13 +23,21 @@ with open('config.json') as config_file:
     config = config['config']
 
 SECRET_KEY = config['secret']
+SECRET_KEY_FALLBACK = config['fallback_secret_key']
 DEBUG = config['DEBUG'] or False
 ALLOWED_HOSTS = config['ALLOWED_HOSTS']
+
+SECURE_SSL_REDIRECT = config["SECURE-SSL-REDIRECT"]
+CSRF_COOKIE_SECURE = config["CSRF-COOKIE-SECURE"]
+SESSION_COOKIE_SECURE = config["SESSION-COOKIE-SECURE"]
+
+SECURE_HSTS_SECONDS = config["HSTS"]["MAXAGE"]
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config["HSTS"]["INCLUDE-SUBDOMAINS"]
+SECURE_HSTS_PRELOAD = config["HSTS"]["PRELOAD"]
 
 sentry_sdk.init(
     dsn=config['sentry_dsn'],
 )
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -44,6 +52,7 @@ INSTALLED_APPS = [
     "tinymce",
     "file_manager",
     "crispy_forms",
+    "storages",
     "crispy_bootstrap4",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -83,15 +92,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mediapolis.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "test": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    },
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config['DATABASE']['DB_NAME'],
@@ -101,7 +105,6 @@ DATABASES = {
         'PORT': config['DATABASE']['DB_PORT'],
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -121,7 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -133,11 +135,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = config['static_url']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -147,7 +148,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = reverse_lazy("blog_app:index")
 LOGOUT_REDIRECT_URL = reverse_lazy("users:login")
 
-MEDIA_URL = '/media/'
+MEDIA_URL = config['media_url']
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -160,3 +161,33 @@ TINYMCE_API_KEY = TINY_MCE_CONFIG.get("API-KEY", "no-api-key")
 TINYMCE_DEFAULT_CONFIG = TINY_MCE_CONFIG["DEFAULT-CONFIG"]
 TINYMCE_SPELLCHECKER = TINY_MCE_CONFIG.get("SPELLCHECKER", False)
 TINYMCE_COMPRESSOR = TINY_MCE_CONFIG.get("COMPRESSOR", False)
+
+AWS_ACCESS_KEY_ID = config["AWS"]["ACCESS-KEY-ID"]
+AWS_SECRET_ACCESS_KEY = config["AWS"]["SECRET-ACCESS-KEY"]
+AWS_S3_REGION_NAME = config["AWS"]["REGION"]
+AWS_S3_ENDPOINT_URL = config["AWS"]["ENDPOINT-URL"]
+AWS_QUERYSTRING_AUTH = config["AWS"]["QUERYSTRING_AUTH"]
+AWS_S3_USE_SSL = config["AWS"]["USE_SSL"]
+AWS_DEFAULT_ACL = config["AWS"]["DEFAULT_ACL"]
+AWS_S3_MAX_MEMORY_SIZE = config["AWS"]["MAX-MEMORY_SIZE"]
+AWS_DEFAULT_BUCKET_NAME = config["AWS"]["DEFAULT_BUCKET_NAME"]
+AWS_STATIC_BUCKET_NAME = config["AWS"]["STATIC_BUCKET_NAME"]
+AWS_S3_CUSTOM_DOMAIN = config["AWS"]["CUSTOM-DOMAIN"]
+AWS_CLOUDFRONT_KEY_ID = config["AWS"]["CLOUDFRONT-KEY-ID"]
+AWS_CLOUDFRONT_KEY = config["AWS"]["CLOUDFRONT-KEY"]
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            'bucket_name': AWS_DEFAULT_BUCKET_NAME
+        }
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            'bucket_name': AWS_STATIC_BUCKET_NAME
+        }
+    }
+}
+

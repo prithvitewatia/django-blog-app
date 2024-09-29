@@ -56,3 +56,4 @@ env.bak/
 venv.bak/
 config.json
 secrets.env
+volume

@@ -35,3 +35,4 @@ README.md
 config.json
 secrets.env
 volume
+file_manager/s3_manager.py
